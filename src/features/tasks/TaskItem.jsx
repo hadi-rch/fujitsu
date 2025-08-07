@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useSortable } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
 import { toggleTask, deleteTask, editTask } from './tasksSlice';
+import { Button, Input, Select } from '../../components/ui/Styled';
 
 const TaskItem = ({ task }) => {
     const dispatch = useDispatch();
@@ -12,6 +13,14 @@ const TaskItem = ({ task }) => {
     const [editData, setEditData] = useState({ text: task.text, categoryId: task.categoryId });
 
     const category = categories.find(cat => cat.id === task.categoryId);
+
+    const handleDelete = () => {
+        if (window.confirm(`Anda yakin ingin menghapus tugas: "${task.text}"?`)) {
+            // Jika user menekan "OK", baru jalankan dispatch
+            dispatch(deleteTask({ id: task.id }));
+        }
+    };
+
 
     const {
         attributes,
@@ -62,9 +71,13 @@ const TaskItem = ({ task }) => {
             <span style={{ textDecoration: task.completed ? 'line-through' : 'none', flexGrow: 1 }}>
                 {task.text}
             </span>
-            <em style={{ fontSize: '0.8em', color: '#555' }}>[{category ? category.name : 'Tanpa Kategori'}]</em>
-            <button onClick={() => setIsEditing(true)}>Edit</button>
-            <button onClick={() => dispatch(deleteTask({ id: task.id }))}>Hapus</button>
+            <span style={{ marginLeft: 'auto', background: '#eee', padding: '2px 8px', borderRadius: '12px', fontSize: '0.75rem', color: '#555' }}>
+                {category ? category.name : 'Tanpa Kategori'}
+            </span>
+            <div style={{ marginLeft: '1rem', display: 'flex', gap: '0.5rem' }}>
+                <Button className="secondary" onClick={() => setIsEditing(true)}>Edit</Button>
+                <Button danger onClick={handleDelete}>Hapus</Button>
+            </div>
         </>
     );
 
@@ -72,23 +85,27 @@ const TaskItem = ({ task }) => {
     const editMode = (
         <>
             <span style={{ cursor: 'default', marginRight: '10px', color: '#ccc' }}>⠿</span>
-            <input
+
+            <Input
                 type="text"
                 value={editData.text}
                 onChange={(e) => setEditData({ ...editData, text: e.target.value })}
                 style={{ flexGrow: 1 }}
+                autoFocus
             />
-            <select
-                value={editData.categoryId}
+            <Select
+                value={editData.categoryId || ''} // Fallback ke string kosong jika null
                 onChange={(e) => setEditData({ ...editData, categoryId: e.target.value })}
             >
-                <option value={null}>Tanpa Kategori</option>
+                <option value="">Tanpa Kategori</option>
                 {categories.map(cat => (
                     <option key={cat.id} value={cat.id}>{cat.name}</option>
                 ))}
-            </select>
-            <button onClick={handleSave}>Simpan</button>
-            <button onClick={handleCancel}>Batal</button>
+            </Select>
+            <div style={{ marginLeft: '1rem', display: 'flex', gap: '0.5rem' }}>
+                <Button onClick={handleSave}>Simpan</Button>
+                <Button className="secondary" onClick={handleCancel}>Batal</Button>
+            </div>
         </>
     );
 

@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { addTask } from '../tasks/tasksSlice';
+import { Card, Title, Input, Select, Button } from '../../components/ui/Styled';
 
 const AddTaskForm = () => {
     const [text, setText] = useState('');
@@ -26,28 +27,27 @@ const AddTaskForm = () => {
     };
 
     return (
-        <form onSubmit={handleSubmit} style={{ display: 'flex', gap: '8px' }}>
-            <input
-                type="text"
-                placeholder="Apa yang ingin Anda kerjakan?"
-                value={text}
-                onChange={(e) => setText(e.target.value)}
-                style={{ flexGrow: 1, padding: '8px' }}
-            />
-            <select
-                value={categoryId}
-                onChange={(e) => setCategoryId(e.target.value)}
-                style={{ padding: '8px' }}
-            >
-                <option value="" disabled>-- Pilih Kategori --</option>
-                {categories.map(cat => (
-                    <option key={cat.id} value={cat.id}>{cat.name}</option>
-                ))}
-            </select>
-            <button type="submit" style={{ padding: '8px' }}>
-                Tambah Tugas
-            </button>
-        </form>
+        <Card>
+            <Title>Tambah Tugas Baru</Title>
+            <form onSubmit={handleSubmit} style={{ display: 'flex', gap: '0.75rem' }}>
+                <Input
+                    type="text"
+                    placeholder="Tulis tugas baru di sini..."
+                    value={text}
+                    onChange={(e) => setText(e.target.value)}
+                />
+                <Select
+                    value={categoryId}
+                    onChange={(e) => setCategoryId(e.target.value)}
+                >
+                    {categories.length === 0 && <option disabled>Buat kategori dulu!</option>}
+                    {categories.map(cat => (
+                        <option key={cat.id} value={cat.id}>{cat.name}</option>
+                    ))}
+                </Select>
+                <Button type="submit">Tambah</Button>
+            </form>
+        </Card>
     );
 };
 

@@ -1,39 +1,32 @@
 import React from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { setStatusFilter, setCategoryFilter, setSearchTerm } from './filterSlice';
+import { Input, Select } from '../../components/ui/Styled';
 
 const FilterControls = () => {
     const dispatch = useDispatch();
-    // Ambil data kategori dari categoriesSlice
     const categories = useSelector(state => state.categories.items);
 
     return (
-        <div style={{ display: 'flex', gap: '20px', margin: '20px 0' }}>
-            <input
+        <div style={{ display: 'grid', gridTemplateColumns: '2fr 1fr 1fr', gap: '1rem', marginTop: '1rem', marginBottom: '1.5rem' }}>
+            <Input
                 type="text"
-                placeholder="Cari tugas..."
+                placeholder="Cari berdasarkan nama tugas..."
                 onChange={(e) => dispatch(setSearchTerm(e.target.value))}
             />
 
-            <div>
-                <label>Status: </label>
-                <select onChange={(e) => dispatch(setStatusFilter(e.target.value))}>
-                    <option value="All">Semua</option>
-                    <option value="Completed">Selesai</option>
-                    <option value="Active">Aktif</option>
-                </select>
-            </div>
+            <Select onChange={(e) => dispatch(setStatusFilter(e.target.value))}>
+                <option value="All">Semua Status</option>
+                <option value="Completed">Selesai</option>
+                <option value="Active">Aktif</option>
+            </Select>
 
-            <div>
-                <label>Kategori: </label>
-                <select onChange={(e) => dispatch(setCategoryFilter(e.target.value))}>
-                    <option value="All">Semua Kategori</option>
-                    {/* Gunakan ID untuk value dan name untuk teks */}
-                    {categories.map(cat => (
-                        <option key={cat.id} value={cat.id}>{cat.name}</option>
-                    ))}
-                </select>
-            </div>
+            <Select onChange={(e) => dispatch(setCategoryFilter(e.target.value))}>
+                <option value="All">Semua Kategori</option>
+                {categories.map(cat => (
+                    <option key={cat.id} value={cat.id}>{cat.name}</option>
+                ))}
+            </Select>
         </div>
     );
 };

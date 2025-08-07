@@ -4,32 +4,33 @@ import TaskList from './features/tasks/TaskList';
 import FilterControls from './features/filters/FilterControls';
 import ApiWidget from './features/widget/ApiWidget';
 import CategoryManager from './features/categories/CategoryManager';
+import { GlobalStyles } from './styles/GlobalStyles';
+import { Container, Title, Button, Card } from './components/ui/Styled';
 
 function App() {
     const [isCategoryManagerOpen, setCategoryManagerOpen] = useState(false);
 
     return (
-        <div style={{ padding: '20px', fontFamily: 'sans-serif', maxWidth: '800px', margin: 'auto' }}>
-            {isCategoryManagerOpen && <CategoryManager onClose={() => setCategoryManagerOpen(false)} />}
+        <>
+            <GlobalStyles />
+            <Container>
+                {isCategoryManagerOpen && <CategoryManager onClose={() => setCategoryManagerOpen(false)} />}
 
-            <h1>Aplikasi To-Do List</h1>
-            <ApiWidget />
-            <p style={{ marginTop: '20px' }}>Ini adalah prototipe aplikasi to-do list yang berjalan offline.</p>
+                <Title as="h1" style={{ textAlign: 'center', marginBottom: '1rem' }}>Aplikasi To-Do List</Title>
+                <ApiWidget />
 
-            <h2>Tambah Tugas Baru</h2>
-            <AddTaskForm />
+                <AddTaskForm />
 
-            <hr style={{ margin: '30px 0' }} />
-
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                <h2>Filter & Cari Tugas</h2>
-                <button onClick={() => setCategoryManagerOpen(true)}>Kelola Kategori</button>
-            </div>
-            <FilterControls />
-
-            <h2 style={{ marginTop: '20px' }}>Daftar Tugas</h2>
-            <TaskList />
-        </div>
+                <Card>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem' }}>
+                        <Title>Daftar Tugas</Title>
+                        <Button className="secondary" onClick={() => setCategoryManagerOpen(true)}>Kelola Kategori</Button>
+                    </div>
+                    <FilterControls />
+                    <TaskList />
+                </Card>
+            </Container>
+        </>
     );
 }
 
